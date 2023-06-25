@@ -9,11 +9,26 @@ public class Car : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private float acceleration = 1f;
     [SerializeField] private float turnSpeed = 200f;
+    private static float timeToStart = 3f;
+    private static float timer = 0f;
+    private static bool isCarRunning = false;
 
     private int steerValue;
 
-    void Update()
+    private void Start()
     {
+        timer = timeToStart;
+    }
+
+    private void Update()
+    {
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            isCarRunning = false;
+            return;
+        }
+        isCarRunning = true;
         speed += (acceleration * Time.deltaTime);
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
@@ -26,6 +41,7 @@ public class Car : MonoBehaviour
         steerValue = value;
     }
 
+    public bool GetIsCarRunning() => isCarRunning;
 
     private void OnTriggerEnter(Collider other)
     {
